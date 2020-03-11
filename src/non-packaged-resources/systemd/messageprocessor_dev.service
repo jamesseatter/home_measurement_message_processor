@@ -1,0 +1,14 @@
+[Unit]
+Description = Home measurement message processor service DEV
+After = syslog.target
+
+[Service]
+WorkingDirectory=/home/iot/bin/messageprocessor_dev
+Type = simple
+User = iot
+ExecStart = /usr/bin/java -jar -Dspring.profiles.active=dev messageprocessor.jar
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy = multi-user.target
