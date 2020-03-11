@@ -1,14 +1,11 @@
 package eu.seatter.homemeasurement.messageprocessor.services.database.alert;
 
-import eu.seatter.homemeasurement.messageprocessor.services.database.CustomSQLErrorCodeTranslator;
+import eu.seatter.homemeasurement.messageprocessor.model.AlertRecord;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-
-import javax.sql.DataSource;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,28 +16,17 @@ import javax.sql.DataSource;
 @Repository
 public class AlertDAO {
 
-    private JdbcTemplate jdbcTemplate;
-
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    private SimpleJdbcInsert simpleJdbcInsert;
-
-    private SimpleJdbcCall simpleJdbcCall;
-
     @Autowired
-    public void setDataSource(final DataSource dataSource) {
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        final CustomSQLErrorCodeTranslator customSQLErrorCodeTranslator = new CustomSQLErrorCodeTranslator();
-        jdbcTemplate.setExceptionTranslator(customSQLErrorCodeTranslator);
+    JdbcTemplate jdbcTemplate;
 
-        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        simpleJdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("alert");
+    @Value("${database.alert.table:CHANGE_ME}")
+    private String db_alert_table;
+
+    public int insertRecord(@NotNull final AlertRecord ar) {
+//        System.out.println("inserting message into DB");
+//        //final String sql = "INSERT INTO " + db_alert_table + " (date_measured_utc,sensor_type,sensor_id,title,description,measurement_unit,value,low_threshold,high_threshold,alert_group,alert_destination) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+//        final String sql = "INSERT INTO " + db_alert_table + " (uid, date_inserted_utc, description, sensor_id, alert_type) VALUES (?,?,?,?,?)";
+//        return jdbcTemplate.update(sql, ar.get);
+        return 1;
     }
-
-//    public int insertRecord(final int id) {
-//        return jdbcTemplate.update("INSERT INTO EMPLOYEE VALUES (?, ?, ?, ?)", id, "Bill", "Gates", "USA");
-//    }
-
-
-
 }
