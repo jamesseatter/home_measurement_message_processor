@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 import lombok.*;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,7 +18,8 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder=true)
-public class SensorRecord implements Comparable<SensorRecord> {
+public class Measurement implements Comparable<Measurement> {
+    private UUID recordUID;
     private String sensorid;
     private String title;
 //    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -32,8 +34,13 @@ public class SensorRecord implements Comparable<SensorRecord> {
 
     private Double low_threshold;
     private Double high_threshold;
+
+    private Boolean measurementSentToMq = false;
+
+    private UUID alertUID;
     private String alertgroup;
     private String alertdestination;
+
 
     public String loggerFormat() {
         return "[" + sensorid + "/" + sensorType + "/" + familyid + "]";
@@ -41,7 +48,7 @@ public class SensorRecord implements Comparable<SensorRecord> {
 
     @Override
     public String toString() {
-        return "SensorRecord{" +
+        return "measurement{" +
                 "sensorid='" + sensorid + '\'' +
                 ", sensorType=" + sensorType +
                 ", measureTimeUTC=" + measureTimeUTC +
@@ -50,7 +57,7 @@ public class SensorRecord implements Comparable<SensorRecord> {
     }
 
     @Override
-    public int compareTo(SensorRecord that) {
+    public int compareTo(Measurement that) {
         return this.measureTimeUTC.compareTo(that.measureTimeUTC);
     }
 }
