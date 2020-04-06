@@ -56,9 +56,9 @@ jobs:
           path: ~/junit
       - store_artifacts:
           path: ~/junit
-
-workflows:
-  maven_test:
-    jobs:
-      - maven/test # checkout, build, test, and upload test results
-
+#
+#workflows:
+#  maven_test:
+#    jobs:
+#      - maven/test # checkout, build, test, and upload test results
+#
