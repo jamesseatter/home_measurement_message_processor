@@ -37,7 +37,7 @@ public class Measurement implements Comparable<Measurement> {
 
     private Boolean measurementSentToMq = false;
 
-    private UUID alertUID;
+    private UUID alertID;
     private String alertgroup;
     private String alertdestination;
 

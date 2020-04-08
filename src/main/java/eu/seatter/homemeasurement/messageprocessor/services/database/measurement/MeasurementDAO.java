@@ -33,7 +33,7 @@ public class MeasurementDAO {
         if (validateResult == null) {
             log.debug("Inserting measurement into DB");
             final String sql = "INSERT INTO " + db_measurement_table + " (record_id,date_measured_utc,sensor_type,sensor_id,title,description,measurement_unit,value,low_threshold,high_threshold,alert_group,alert_destination, alert_uid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            return jdbcTemplate.update(sql, sr.getRecordUID().toString(), sr.getMeasureTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(), sr.getSensorType().toString(), sr.getSensorid(), sr.getTitle(), sr.getDescription(), sr.getMeasurementUnit().toString(), sr.getValue(), sr.getLow_threshold(), sr.getHigh_threshold(), sr.getAlertgroup(), sr.getAlertdestination(), sr.getAlertUID().toString());
+            return jdbcTemplate.update(sql, sr.getRecordUID().toString(), sr.getMeasureTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(), sr.getSensorType().toString(), sr.getSensorid(), sr.getTitle(), sr.getDescription(), sr.getMeasurementUnit().toString(), sr.getValue(), sr.getLow_threshold(), sr.getHigh_threshold(), sr.getAlertgroup(), sr.getAlertdestination(), sr.getAlertID().toString());
         } else {
             throw new IllegalArgumentException("Provided measurement value : " + validateResult);
         }
@@ -41,7 +41,7 @@ public class MeasurementDAO {
 
     private String validateRecord(Measurement record) {
         if ((record.getMeasureTimeUTC() == null) || (record.getMeasureTimeUTC().toString() == "")) {return "MeasureTimeUTC";}
-        if ((record.getAlertUID() == null) || (record.getAlertUID().toString() == "")) { record.setAlertUID(UUID.fromString( "00000000-0000-0000-0000-000000000000" ));}
+        if ((record.getAlertID() == null) || (record.getAlertID().toString() == "")) { record.setAlertID(UUID.fromString( "00000000-0000-0000-0000-000000000000" ));}
         if ((record.getTitle() == null) || (record.getTitle() == "")) {record.setTitle("");}
         if ((record.getDescription() == null) || (record.getDescription() == "")) {record.setDescription("");}
         return null;

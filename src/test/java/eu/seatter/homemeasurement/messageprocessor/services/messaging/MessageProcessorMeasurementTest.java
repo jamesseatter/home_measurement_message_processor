@@ -38,7 +38,7 @@ class MessageProcessorMeasurementTest {
     @Test
     void whenProcessMessage_givenGoodJson_thenReturn1() {
         //given
-        String json = "{\"recordUID\":\"3182b3d8-291b-43ca-8c09-40fd272494da\",\"sensorid\":\"28-000008d2fdb9\",\"title\":\"Température de l'eau à l'arrivée\",\"measureTimeUTC\":\"2020-04-04T08:38:00Z\",\"value\":47.3,\"description\":\"Returns the temperature of the hot water entering the house from the central heating system.\",\"measurementUnit\":\"C\",\"sensorType\":\"ONEWIRE\",\"familyid\":40,\"low_threshold\":45.0,\"high_threshold\":60.0,\"measurementSentToMq\":true,\"alertUID\":null,\"alertgroup\":\"temperature_threshold_alerts_private\",\"alertdestination\":\"BORRY\"}";
+        String json = "{\"recordUID\":\"3182b3d8-291b-43ca-8c09-40fd272494da\",\"sensorid\":\"28-000008d2fdb9\",\"title\":\"Température de l'eau à l'arrivée\",\"measureTimeUTC\":\"2020-04-04T08:38:00Z\",\"value\":47.3,\"description\":\"Returns the temperature of the hot water entering the house from the central heating system.\",\"measurementUnit\":\"C\",\"sensorType\":\"ONEWIRE\",\"familyid\":40,\"low_threshold\":45.0,\"high_threshold\":60.0,\"measurementSentToMq\":true,\"alertID\":null,\"alertgroup\":\"temperature_threshold_alerts_private\",\"alertdestination\":\"BORRY\"}";
 
         //when
         when(measurementDAO.insertRecord(any(Measurement.class))).thenReturn(1);
@@ -66,7 +66,7 @@ class MessageProcessorMeasurementTest {
     @Test
     void whenProcessMessage_givenNullValueInJson_thenReturnMinus1() {
         //given
-        String json = "{\"recordUID\":null,\"sensorid\":\"28-000008d2fdb9\",\"title\":\"Température de l'eau à l'arrivée\",\"measureTimeUTC\":\"2020-04-04T08:38:00Z\",\"value\":47.3,\"description\":\"Returns the temperature of the hot water entering the house from the central heating system.\",\"measurementUnit\":\"C\",\"sensorType\":\"ONEWIRE\",\"familyid\":40,\"low_threshold\":45.0,\"high_threshold\":60.0,\"measurementSentToMq\":true,\"alertUID\":null,\"alertgroup\":\"temperature_threshold_alerts_private\",\"alertdestination\":\"BORRY\"}";
+        String json = "{\"recordUID\":null,\"sensorid\":\"28-000008d2fdb9\",\"title\":\"Température de l'eau à l'arrivée\",\"measureTimeUTC\":\"2020-04-04T08:38:00Z\",\"value\":47.3,\"description\":\"Returns the temperature of the hot water entering the house from the central heating system.\",\"measurementUnit\":\"C\",\"sensorType\":\"ONEWIRE\",\"familyid\":40,\"low_threshold\":45.0,\"high_threshold\":60.0,\"measurementSentToMq\":true,\"alertID\":null,\"alertgroup\":\"temperature_threshold_alerts_private\",\"alertdestination\":\"BORRY\"}";
 
         //when
         when(measurementDAO.insertRecord(any(Measurement.class))).thenThrow(NullPointerException.class);
@@ -80,7 +80,7 @@ class MessageProcessorMeasurementTest {
     @Test
     void whenProcessMessage_givenDBNotAccessible_thenReturn0() {
         //given
-        String json = "{\"recordUID\":null,\"sensorid\":\"28-000008d2fdb9\",\"title\":\"Température de l'eau à l'arrivée\",\"measureTimeUTC\":\"2020-04-04T08:38:00Z\",\"value\":47.3,\"description\":\"Returns the temperature of the hot water entering the house from the central heating system.\",\"measurementUnit\":\"C\",\"sensorType\":\"ONEWIRE\",\"familyid\":40,\"low_threshold\":45.0,\"high_threshold\":60.0,\"measurementSentToMq\":true,\"alertUID\":null,\"alertgroup\":\"temperature_threshold_alerts_private\",\"alertdestination\":\"BORRY\"}";
+        String json = "{\"recordUID\":null,\"sensorid\":\"28-000008d2fdb9\",\"title\":\"Température de l'eau à l'arrivée\",\"measureTimeUTC\":\"2020-04-04T08:38:00Z\",\"value\":47.3,\"description\":\"Returns the temperature of the hot water entering the house from the central heating system.\",\"measurementUnit\":\"C\",\"sensorType\":\"ONEWIRE\",\"familyid\":40,\"low_threshold\":45.0,\"high_threshold\":60.0,\"measurementSentToMq\":true,\"alertID\":null,\"alertgroup\":\"temperature_threshold_alerts_private\",\"alertdestination\":\"BORRY\"}";
 
         //when
         when(measurementDAO.insertRecord(any(Measurement.class))).thenThrow(Mockito.mock(DataAccessException.class));
