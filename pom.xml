@@ -220,6 +220,13 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*Config.*</exclude>
+                        <exclude>**/*Dev.*</exclude>
+                        <exclude>**/Debug*.*</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

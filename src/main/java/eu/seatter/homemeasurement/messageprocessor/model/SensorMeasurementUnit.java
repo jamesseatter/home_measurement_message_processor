@@ -7,16 +7,13 @@ package eu.seatter.homemeasurement.messageprocessor.model;
  * Time: 13:21
  */
 public enum SensorMeasurementUnit {
-    C ("C"),
-    F ("F");
+    C ("C");
 
     private final String displayName;
 
     SensorMeasurementUnit(String displayName) {
         this.displayName = displayName;
     }
-
-    public String displayName() { return displayName; }
 
     // Optionally and/or additionally, toString.
     @Override

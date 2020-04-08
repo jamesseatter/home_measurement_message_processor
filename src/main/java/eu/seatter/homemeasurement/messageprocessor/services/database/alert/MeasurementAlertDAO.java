@@ -30,7 +30,7 @@ public class MeasurementAlertDAO {
     public int insertRecord(@NotNull final MeasurementAlert ma) {
         String validateResult = validateRecord(ma);
         if (validateResult == null) {
-            log.info("inserting measurement alert message into DB");
+            log.debug("Inserting measurement alert into DB");
             final String sql = "INSERT INTO " + db_alert_table + " (alert_uid, date_alert_utc, title, value, measurement_unit, message, email_sent, email_sent_to) VALUES (?,?,?,?,?,?,?,?)";
             return jdbcTemplate.update(sql, ma.getAlertUID().toString(), ma.getAlertTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(), ma.getTitle(), ma.getValue(), ma.getMeasurementUnit().toString(), ma.getMessage(), ma.isAlertSentEmail(), ma.getAlertSentEmailTO());
         } else {
@@ -38,11 +38,11 @@ public class MeasurementAlertDAO {
         }
     }
 
-    private String validateRecord(@NotNull MeasurementAlert ma) {
-        if ((ma.getAlertUID() == null) || (ma.getAlertUID().toString() == "")) {return "AlertUID";}
-        if ((ma.getAlertTimeUTC() == null) || (ma.getAlertTimeUTC().toString() == "")) {return "AlertTimeUTC";}
-        if ((ma.getTitle() == null) || (ma.getTitle().toString() == "")) {ma.setTitle("");}
-        if ((ma.getMessage() == null) || (ma.getMessage().toString() == "")) {ma.setMessage("");}
+    private String validateRecord(@NotNull MeasurementAlert record) {
+        if ((record.getAlertUID() == null) || (record.getAlertUID().toString() == "")) {return "AlertUID";}
+        if ((record.getAlertTimeUTC() == null) || (record.getAlertTimeUTC().toString() == "")) {return "AlertTimeUTC";}
+        if ((record.getTitle() == null) || (record.getTitle().toString() == "")) {record.setTitle("");}
+        if ((record.getMessage() == null) || (record.getMessage().toString() == "")) {record.setMessage("");}
         return null;
     }
 }

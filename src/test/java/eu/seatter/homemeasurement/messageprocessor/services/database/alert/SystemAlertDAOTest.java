@@ -32,7 +32,7 @@ class SystemAlertDAOTest {
 
     private SystemAlertDAO systemAlertDAO;
 
-    private String db_table = "alertsystem";
+    private final String db_table = "alertsystem";
 
     @BeforeEach
     public void initUseCase() {

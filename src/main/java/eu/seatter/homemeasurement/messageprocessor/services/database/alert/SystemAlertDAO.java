@@ -29,7 +29,7 @@ public class SystemAlertDAO {
 
     public int insertRecord(@NotNull final SystemAlert systemAlert) {
         log.warn("System alert logging to DB not available");
-        log.info("inserting system alert message into DB");
+        log.debug("Inserting system alert into DB");
         final String sql = "INSERT INTO " + db_alert_table + " (alert_uid,date_alert_utc, title, message) VALUES (?,?,?,?)";
         return jdbcTemplate.update(sql,  systemAlert.getAlertUID().toString(), systemAlert.getAlertTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(),systemAlert.getTitle(), systemAlert.getMessage());
     }

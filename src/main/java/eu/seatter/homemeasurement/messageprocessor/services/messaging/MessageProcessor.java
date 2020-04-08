@@ -9,5 +9,5 @@ import com.fasterxml.jackson.core.JsonProcessingException;
  * Time: 23:33
  */
 public interface MessageProcessor {
-    public int processMessage(String json) throws JsonProcessingException;
+    public int processMessage(String json);
 }

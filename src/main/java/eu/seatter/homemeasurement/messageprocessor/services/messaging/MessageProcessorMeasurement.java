@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import eu.seatter.homemeasurement.messageprocessor.model.Measurement;
+import eu.seatter.homemeasurement.messageprocessor.services.database.alert.BadJsonMessageDAO;
 import eu.seatter.homemeasurement.messageprocessor.services.database.measurement.MeasurementDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -22,15 +23,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageProcessorMeasurement implements MessageProcessor {
     private final MeasurementDAO measurementDAO;
+    private final BadJsonMessageDAO badJsonMessageDAO;
 
-    public MessageProcessorMeasurement(MeasurementDAO measurementDAO) {
+    public MessageProcessorMeasurement(MeasurementDAO measurementDAO, BadJsonMessageDAO badJsonMessageDAO) {
         this.measurementDAO = measurementDAO;
+        this.badJsonMessageDAO = badJsonMessageDAO;
     }
 
     public int processMessage(String json) {
         log.info("New message received - " + json);
         if(json == null) {
             log.error("The message is null and cannot be processed. It will be removed from the queue.");
+            badJsonMessageDAO.insertRecord("Measurement JSON is empty", json);
             return -1;
         }
 
@@ -40,7 +44,7 @@ public class MessageProcessorMeasurement implements MessageProcessor {
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 
-        Measurement measurement;
+        Measurement measurement = null;
 
         try {
             measurement = mapper.readValue(json, Measurement.class);
@@ -52,14 +56,18 @@ public class MessageProcessorMeasurement implements MessageProcessor {
                 return 0; // requeue the message
             } catch (NullPointerException ex) {
                 log.error("A value in the message is NULL and cannot be processed : " + ex.getMessage());
+                badJsonMessageDAO.insertRecord("Measurement JSON Invalid", json);
                 return -1; //reject the message
             } catch (IllegalArgumentException ex) {
                 log.error("The message is empty(null) and cannot be processed : " + ex.getMessage());
+                badJsonMessageDAO.insertRecord("Measurement JSON Invalid", json);
                 return -1; //reject the message
             }
-        } catch (JsonProcessingException ex) {
+        } catch (JsonProcessingException | IllegalArgumentException ex) {
             log.error("Unable to convert received message : " + ex.getLocalizedMessage());
-            return 0;
+            badJsonMessageDAO.insertRecord("Measurement JSON Invalid", json);
+            return -1; //reject the message, do not requeue
         }
     }
+
 }

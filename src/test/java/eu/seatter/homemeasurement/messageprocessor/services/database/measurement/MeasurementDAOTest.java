@@ -64,7 +64,7 @@ class MeasurementDAOTest {
         String sql = "INSERT INTO measurement (record_id,date_measured_utc,sensor_type,sensor_id,title,description,measurement_unit,value,low_threshold,high_threshold,alert_group,alert_destination, alert_uid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         //when
-        when(jdbcTemplate.update(sql, measurement.getRecordUID().toString(), measurement.getMeasureTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(), measurement.getSensorType().toString(), measurement.getSensorid(), measurement.getTitle(), measurement.getDescription(), measurement.getMeasurementUnit().toString(), measurement.getValue(), measurement.getLow_threshold(), measurement.getHigh_threshold(), measurement.getAlertgroup(), measurement.getAlertdestination(), measurement.getAlertUID())).thenReturn(1);
+        when(jdbcTemplate.update(sql, measurement.getRecordUID().toString(), measurement.getMeasureTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(), measurement.getSensorType().toString(), measurement.getSensorid(), measurement.getTitle(), measurement.getDescription(), measurement.getMeasurementUnit().toString(), measurement.getValue(), measurement.getLow_threshold(), measurement.getHigh_threshold(), measurement.getAlertgroup(), measurement.getAlertdestination(), measurement.getAlertUID().toString())).thenReturn(1);
 
         //then
         assertEquals(1, measurementDAO.insertRecord(measurement));

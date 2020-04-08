@@ -1,6 +1,7 @@
 package eu.seatter.homemeasurement.messageprocessor.services.messaging;
 
 import eu.seatter.homemeasurement.messageprocessor.model.SystemAlert;
+import eu.seatter.homemeasurement.messageprocessor.services.database.alert.BadJsonMessageDAO;
 import eu.seatter.homemeasurement.messageprocessor.services.database.alert.SystemAlertDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,9 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,11 +25,14 @@ class MessageProcessorSystemAlertTest {
     @Mock
     SystemAlertDAO systemAlertDAO;
 
+    @Mock
+    BadJsonMessageDAO badJsonMessageDAO;
+
     MessageProcessorSystemAlert messageProcessorSystemAlert;
 
     @BeforeEach
     void setUp() {
-        messageProcessorSystemAlert = new MessageProcessorSystemAlert(systemAlertDAO);
+        messageProcessorSystemAlert = new MessageProcessorSystemAlert(systemAlertDAO, badJsonMessageDAO);
     }
 
     @Test
@@ -57,7 +59,8 @@ class MessageProcessorSystemAlertTest {
 
         //then
         int rows = messageProcessorSystemAlert.processMessage(json);
-        assertEquals(0,rows);
+        assertEquals(-1,rows);
+        verify(badJsonMessageDAO, times(1)).insertRecord(anyString(),anyString());
     }
 
     @Test
@@ -71,6 +74,7 @@ class MessageProcessorSystemAlertTest {
         //then
         int rows = messageProcessorSystemAlert.processMessage(json);
         assertEquals(-1,rows);
+        verify(badJsonMessageDAO, times(1)).insertRecord(anyString(),anyString());
     }
 
     @Test
@@ -96,5 +100,6 @@ class MessageProcessorSystemAlertTest {
         //then
         int rows = messageProcessorSystemAlert.processMessage(json);
         assertEquals(-1,rows);
+        verify(badJsonMessageDAO, times(1)).insertRecord(anyString(),eq(null));
     }
 }

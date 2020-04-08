@@ -21,15 +21,10 @@ import java.util.Objects;
 @Service
 @Slf4j
 public class MessagingService implements CommandLineRunner {
-    final
-    MessageProcessorMeasurement measurementMessageProcessor;
-    final
-    MessageProcessorMeasurementAlert alertMessageProcessor;
-    final
-    MessageProcessorSystemAlert systemAlertMessageProcessor;
-
-    final
-    Environment env;
+    final MessageProcessorMeasurement measurementMessageProcessor;
+    final MessageProcessorMeasurementAlert alertMessageProcessor;
+    final MessageProcessorSystemAlert systemAlertMessageProcessor;
+    final Environment env;
 
     private final String MQ_HOST;
     private final int MQ_PORT;
@@ -37,6 +32,10 @@ public class MessagingService implements CommandLineRunner {
     private final String MQ_EXCHANGE_NAME;
     private final String MQ_USERNAME;
     private final String MQ_USERPASSWORD;
+    private final String MQ_MEASUREMENT_ENABLED;
+    private final String MQ_MEASUREMENT_ALERT_ENABLED;
+    private final String MQ_SYSTEM_ALERT_ENABLED;
+
 
     public MessagingService(@Value("${RabbitMQService.hostname:localhost}") String hostname,
                             @Value("${RabbitMQService.portnumber:5672}") int portnumber,
@@ -44,6 +43,9 @@ public class MessagingService implements CommandLineRunner {
                             @Value("${RabbitMQService.exchangee:}") String exchangename,
                             @Value("${RabbitMQService.username:}") String username,
                             @Value("${RabbitMQService.password:}") String password,
+                            @Value("${RabbitMQService.processing.measurement.enabled:false}") String mqMeasurementEnabled,
+                            @Value("RabbitMQService.processing.alert.measurement.enabled") String mqMeasurementAlertEnabled,
+                            @Value("RabbitMQService.processing.alert.system.enabled") String mqSystemAlertEnabled,
                             MessageProcessorMeasurement measurementMessageProcessor,
                             MessageProcessorMeasurementAlert alertMessageProcessor,
                             MessageProcessorSystemAlert systemAlertMessageProcessor,
@@ -54,6 +56,9 @@ public class MessagingService implements CommandLineRunner {
         this.MQ_EXCHANGE_NAME = exchangename;
         this.MQ_USERNAME = username;
         this.MQ_USERPASSWORD = password;
+        this.MQ_MEASUREMENT_ENABLED = mqMeasurementEnabled;
+        this.MQ_MEASUREMENT_ALERT_ENABLED = mqMeasurementAlertEnabled;
+        this.MQ_SYSTEM_ALERT_ENABLED = mqSystemAlertEnabled;
         this.measurementMessageProcessor = measurementMessageProcessor;
         this.alertMessageProcessor = alertMessageProcessor;
         this.systemAlertMessageProcessor = systemAlertMessageProcessor;
@@ -63,10 +68,6 @@ public class MessagingService implements CommandLineRunner {
         log.debug("Port       :" + MQ_PORT);
         log.debug("VHost      :" + MQ_VHOST);
         log.debug("ExName     :" + MQ_EXCHANGE_NAME);
-        log.debug("DB         :" + env.getProperty("spring.datasource.url"));
-        log.debug("Table - M  :" + env.getProperty("database.measurement.table"));
-        log.debug("Table - AM :" + env.getProperty("database.alert.measurement.table"));
-        log.debug("Table - AS :" + env.getProperty("database.alert.system.table"));
     }
 
     @Override
@@ -79,13 +80,13 @@ public class MessagingService implements CommandLineRunner {
         factory.setPassword(MQ_USERPASSWORD);
         factory.setVirtualHost(MQ_VHOST);
 
-        if(Objects.requireNonNull(env.getProperty("RabbitMQService.processing.measurement.enabled")).contentEquals("true")) {
+        if(MQ_MEASUREMENT_ENABLED.equals("true")) {
             setupCallbacks(factory, "measurement");
         }
-        if(Objects.requireNonNull(env.getProperty("RabbitMQService.processing.alert.measurement.enabled")).contentEquals("true")) {
+        if(MQ_MEASUREMENT_ALERT_ENABLED.equals("true")) {
             setupCallbacks(factory, "alertmeasurement");
         }
-        if(Objects.requireNonNull(env.getProperty("RabbitMQService.processing.alert.system.enabled")).contentEquals("true")) {
+        if(MQ_SYSTEM_ALERT_ENABLED.equals("true")) {
             setupCallbacks(factory,"alertsystem");
         }
         log.info("Initialisation complete");
@@ -180,6 +181,7 @@ public class MessagingService implements CommandLineRunner {
                 int rowCount = messageProcessor.processMessage(message);
                 if (rowCount > 0) {
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+                    log.info("Message inserted into DB");
                 } else if(rowCount == -1) {
                     //-1 = the message is badly formatted and must be rejected
                     log.warn("The message was rejected and will not be processed further");

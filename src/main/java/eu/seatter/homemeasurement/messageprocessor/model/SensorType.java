@@ -7,5 +7,5 @@ package eu.seatter.homemeasurement.messageprocessor.model;
  * Time: 15:05
  */
 public enum SensorType {
-    ANALOGUE, DIGITAL, ONEWIRE
+    ONEWIRE
 }

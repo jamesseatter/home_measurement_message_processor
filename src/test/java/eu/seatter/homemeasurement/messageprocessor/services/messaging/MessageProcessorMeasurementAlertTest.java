@@ -1,6 +1,7 @@
 package eu.seatter.homemeasurement.messageprocessor.services.messaging;
 
 import eu.seatter.homemeasurement.messageprocessor.model.MeasurementAlert;
+import eu.seatter.homemeasurement.messageprocessor.services.database.alert.BadJsonMessageDAO;
 import eu.seatter.homemeasurement.messageprocessor.services.database.alert.MeasurementAlertDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,9 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -23,15 +22,17 @@ import static org.mockito.Mockito.when;
  */
 @ExtendWith(MockitoExtension.class)
 class MessageProcessorMeasurementAlertTest {
-
     @Mock
     MeasurementAlertDAO measurementAlertDAO;
+
+    @Mock
+    BadJsonMessageDAO badJsonMessageDAO;
 
     MessageProcessorMeasurementAlert messageProcessorMeasurementAlert;
 
     @BeforeEach
     void setUp() {
-        messageProcessorMeasurementAlert = new MessageProcessorMeasurementAlert(measurementAlertDAO);
+        messageProcessorMeasurementAlert = new MessageProcessorMeasurementAlert(measurementAlertDAO, badJsonMessageDAO);
     }
 
     @Test
@@ -58,7 +59,8 @@ class MessageProcessorMeasurementAlertTest {
 
         //then
         int rows = messageProcessorMeasurementAlert.processMessage(json);
-        assertEquals(0,rows);
+        assertEquals(-1,rows);
+        verify(badJsonMessageDAO, times(1)).insertRecord(anyString(),anyString());
     }
 
     @Test
@@ -72,6 +74,7 @@ class MessageProcessorMeasurementAlertTest {
         //then
         int rows = messageProcessorMeasurementAlert.processMessage(json);
         assertEquals(-1,rows);
+        verify(badJsonMessageDAO, times(1)).insertRecord(anyString(),anyString());
     }
 
     @Test
@@ -97,5 +100,6 @@ class MessageProcessorMeasurementAlertTest {
         //then
         int rows = messageProcessorMeasurementAlert.processMessage(json);
         assertEquals(-1,rows);
+        verify(badJsonMessageDAO, times(1)).insertRecord(anyString(),eq(null));
     }
 }
