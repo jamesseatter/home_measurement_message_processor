@@ -34,11 +34,13 @@ class MeasurementDAOTest {
 
     private MeasurementDAO measurementDAO;
 
+    private final String db_table = "measurement";
+
     @BeforeEach
     public void initUseCase() {
         measurementDAO = new MeasurementDAO(jdbcTemplate);
         ReflectionTestUtils.setField(measurementDAO, "jdbcTemplate", jdbcTemplate);
-        ReflectionTestUtils.setField(measurementDAO, "db_measurement_table", "measurement");
+        ReflectionTestUtils.setField(measurementDAO, "db_measurement_table", db_table);
     }
 
     @Test

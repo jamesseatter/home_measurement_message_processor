@@ -23,11 +23,11 @@ public class BadJsonMessageDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void insertRecord(String title, String message) {
+    public int insertRecord(String title, String message) {
         log.debug("Inserting json bad message into DB");
         if(message == null) { message = "";}
         final String sql = "INSERT INTO " + db_table + " (title, message) VALUES (?,?)";
-        jdbcTemplate.update(sql, title, message);
+        return jdbcTemplate.update(sql, title, message);
     }
 
 }

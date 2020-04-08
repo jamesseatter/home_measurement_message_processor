@@ -33,9 +33,13 @@ class MeasurementAlertDAOTest {
 
     private MeasurementAlertDAO measurementAlertDAO;
 
+    private final String db_table = "alertmeasurement";
+
     @BeforeEach
     public void initUseCase() {
         measurementAlertDAO = new MeasurementAlertDAO(jdbcTemplate);
+        ReflectionTestUtils.setField(measurementAlertDAO, "jdbcTemplate", jdbcTemplate);
+        ReflectionTestUtils.setField(measurementAlertDAO, "db_alert_table", db_table);
     }
 
     @Test
@@ -55,8 +59,6 @@ class MeasurementAlertDAOTest {
         final String sql = "INSERT INTO alertmeasurement (alert_uid, date_alert_utc, title, value, measurement_unit, message, email_sent, email_sent_to) VALUES (?,?,?,?,?,?,?,?)";
 
         //when
-        ReflectionTestUtils.setField(measurementAlertDAO, "jdbcTemplate", jdbcTemplate);
-        ReflectionTestUtils.setField(measurementAlertDAO, "db_alert_table", "alertmeasurement");
         when(jdbcTemplate.update(sql,
                 ma.getAlertUID().toString(),
                 ma.getAlertTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(),
@@ -81,8 +83,6 @@ class MeasurementAlertDAOTest {
         final String sql = "INSERT INTO alertmeasurement (alert_uid, date_alert_utc, title, value, measurement_unit, message, email_sent, email_sent_to) VALUES (?,?,?,?,?,?,?,?)";
 
         //when
-        ReflectionTestUtils.setField(measurementAlertDAO, "jdbcTemplate", jdbcTemplate);
-        ReflectionTestUtils.setField(measurementAlertDAO, "db_alert_table", "alertmeasurement");
 
         //then
         Assertions.assertThrows(NullPointerException.class, () -> jdbcTemplate.update(sql, jdbcTemplate.update(sql, ma.getAlertUID(), ma.getAlertTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(), ma.getTitle(), ma.getValue(), ma.getMeasurementUnit().toString(), ma.getMessage(), ma.isAlertSentEmail(), ma.getAlertSentEmailTO())));
