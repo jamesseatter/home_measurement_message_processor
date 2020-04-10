@@ -10,7 +10,7 @@
     </parent>
     <groupId>eu.seatter.homemeasurement</groupId>
     <artifactId>messageprocessor</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>Home Measurement Message Processor</name>
     <description>Processes the Message Queue for the Home Measurement System</description>
 
