@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import eu.seatter.homemeasurement.messageprocessor.model.SystemAlert;
 import eu.seatter.homemeasurement.messageprocessor.services.database.alert.BadJsonMessageDAO;
 import eu.seatter.homemeasurement.messageprocessor.services.database.alert.SystemAlertDAO;
+import eu.seatter.homemeasurement.messageprocessor.utils.UtilDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
@@ -48,7 +49,8 @@ public class MessageProcessorSystemAlert implements MessageProcessor {
 
         try {
             systemAlert = mapper.readValue(json, SystemAlert.class);
-            log.debug("System Alert record object : " + systemAlert.toString());
+            systemAlert.setAlertTimeUTC(UtilDateTime.convertDateTimeUTCToLocal(systemAlert.getAlertTimeUTC()));
+            log.debug("Measurement record object:" + systemAlert.toString());
             try {
                 log.error("Writing to the DB");
                 return systemAlertDAO.insertRecord(systemAlert);

@@ -11,8 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
@@ -48,7 +48,7 @@ class MeasurementAlertDAOTest {
         MeasurementAlert ma = MeasurementAlert.builder()
                 .alertUID(UUID.randomUUID())
                 .title("Température de l'eau de chaudière")
-                .alertTimeUTC(ZonedDateTime.now(ZoneId.of("Etc/UTC")).truncatedTo(ChronoUnit.MINUTES))
+                .alertTimeUTC(getTimeDateNowInUTC())
                 .measurementUnit(SensorMeasurementUnit.C)
                 .value(56.09)
                 .message("Test alert")
@@ -61,7 +61,7 @@ class MeasurementAlertDAOTest {
         //when
         when(jdbcTemplate.update(sql,
                 ma.getAlertUID().toString(),
-                ma.getAlertTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(),
+                ma.getAlertTimeUTC(),
                 ma.getTitle(),
                 ma.getValue(),
                 ma.getMeasurementUnit().toString(),
@@ -85,7 +85,7 @@ class MeasurementAlertDAOTest {
         //when
 
         //then
-        Assertions.assertThrows(NullPointerException.class, () -> jdbcTemplate.update(sql, jdbcTemplate.update(sql, ma.getAlertUID(), ma.getAlertTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(), ma.getTitle(), ma.getValue(), ma.getMeasurementUnit().toString(), ma.getMessage(), ma.isAlertSentEmail(), ma.getAlertSentEmailTO())));
+        Assertions.assertThrows(NullPointerException.class, () -> jdbcTemplate.update(sql, jdbcTemplate.update(sql, ma.getAlertUID(), ma.getAlertTimeUTC(), ma.getTitle(), ma.getValue(), ma.getMeasurementUnit().toString(), ma.getMessage(), ma.isAlertSentEmail(), ma.getAlertSentEmailTO())));
     }
 
     @Test
@@ -93,7 +93,7 @@ class MeasurementAlertDAOTest {
         MeasurementAlert ma = MeasurementAlert.builder()
                 .alertUID(null)
                 .title("Température de l'eau de chaudière")
-                .alertTimeUTC(ZonedDateTime.now(ZoneId.of("Etc/UTC")).truncatedTo(ChronoUnit.MINUTES))
+                .alertTimeUTC(getTimeDateNowInUTC())
                 .measurementUnit(SensorMeasurementUnit.C)
                 .value(56.09)
                 .message("Test alert")
@@ -129,7 +129,7 @@ class MeasurementAlertDAOTest {
         MeasurementAlert ma = MeasurementAlert.builder()
                 .alertUID(UUID.randomUUID())
                 .title(null)
-                .alertTimeUTC(ZonedDateTime.now(ZoneId.of("Etc/UTC")).truncatedTo(ChronoUnit.MINUTES))
+                .alertTimeUTC(getTimeDateNowInUTC())
                 .measurementUnit(SensorMeasurementUnit.C)
                 .value(56.09)
                 .message("Test alert")
@@ -148,7 +148,7 @@ class MeasurementAlertDAOTest {
         MeasurementAlert ma = MeasurementAlert.builder()
                 .alertUID(UUID.randomUUID())
                 .title(null)
-                .alertTimeUTC(ZonedDateTime.now(ZoneId.of("Etc/UTC")).truncatedTo(ChronoUnit.MINUTES))
+                .alertTimeUTC(getTimeDateNowInUTC())
                 .measurementUnit(SensorMeasurementUnit.C)
                 .value(56.09)
                 .message(null)
@@ -160,5 +160,10 @@ class MeasurementAlertDAOTest {
 
         //assertTrue(ReflectionTestUtils.invokeMethod(measurementAlertDAO, "validateRecord",ma).equals("AlertUID"));
         assertNull(ReflectionTestUtils.invokeMethod(measurementAlertDAO, "validateRecord",ma));
+    }
+
+    private static LocalDateTime getTimeDateNowInUTC() {
+        LocalDateTime ldt = LocalDateTime.now().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().truncatedTo(ChronoUnit.MINUTES);
+        return ldt;
     }
 }

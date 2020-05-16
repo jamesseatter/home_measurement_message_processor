@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.time.ZoneId;
 import java.util.UUID;
 
 /**
@@ -33,7 +32,7 @@ public class MeasurementDAO {
         if (validateResult == null) {
             log.debug("Inserting measurement into DB");
             final String sql = "INSERT INTO " + db_measurement_table + " (record_id,date_measured_utc,sensor_type,sensor_id,title,description,measurement_unit,value,low_threshold,high_threshold,alert_group,alert_destination, alert_uid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            return jdbcTemplate.update(sql, sr.getRecordUID().toString(), sr.getMeasureTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(), sr.getSensorType().toString(), sr.getSensorid(), sr.getTitle(), sr.getDescription(), sr.getMeasurementUnit().toString(), sr.getValue(), sr.getLow_threshold(), sr.getHigh_threshold(), sr.getAlertgroup(), sr.getAlertdestination(), sr.getAlertID().toString());
+            return jdbcTemplate.update(sql, sr.getRecordUID().toString(), sr.getMeasureTimeUTC(), sr.getSensorType().toString(), sr.getSensorid(), sr.getTitle(), sr.getDescription(), sr.getMeasurementUnit().toString(), sr.getValue(), sr.getLow_threshold(), sr.getHigh_threshold(), sr.getAlertgroup(), sr.getAlertdestination(), sr.getAlertID().toString());
         } else {
             throw new IllegalArgumentException("Provided measurement value : " + validateResult);
         }

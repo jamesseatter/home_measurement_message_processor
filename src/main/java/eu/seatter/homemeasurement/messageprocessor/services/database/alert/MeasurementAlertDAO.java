@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.time.ZoneId;
-
 /**
  * Created by IntelliJ IDEA.
  * User: jas
@@ -32,7 +30,7 @@ public class MeasurementAlertDAO {
         if (validateResult == null) {
             log.debug("Inserting measurement alert into DB");
             final String sql = "INSERT INTO " + db_alert_table + " (alert_uid, date_alert_utc, title, value, measurement_unit, message, email_sent, email_sent_to) VALUES (?,?,?,?,?,?,?,?)";
-            return jdbcTemplate.update(sql, ma.getAlertUID().toString(), ma.getAlertTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(), ma.getTitle(), ma.getValue(), ma.getMeasurementUnit().toString(), ma.getMessage(), ma.isAlertSentEmail(), ma.getAlertSentEmailTO());
+            return jdbcTemplate.update(sql, ma.getAlertUID().toString(), ma.getAlertTimeUTC(), ma.getTitle(), ma.getValue(), ma.getMeasurementUnit().toString(), ma.getMessage(), ma.isAlertSentEmail(), ma.getAlertSentEmailTO());
         } else {
             throw new IllegalArgumentException("Provided measurement value : " + validateResult);
         }

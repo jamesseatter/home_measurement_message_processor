@@ -10,8 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
@@ -48,13 +48,13 @@ class SystemAlertDAOTest {
                 .alertUID(UUID.randomUUID())
                 .title("Température de l'eau de chaudière")
                 .message("Returns the temperature of the hot water in the boiler")
-                .alertTimeUTC(ZonedDateTime.now(ZoneId.of("Etc/UTC")).truncatedTo(ChronoUnit.MINUTES))
+                .alertTimeUTC(getTimeDateNowInUTC() )
                 .build();
 
         String sql = "INSERT INTO " + db_table + " (alert_uid,date_alert_utc, title, message) VALUES (?,?,?,?)";
 
         //when
-        when(jdbcTemplate.update(sql,  systemAlert.getAlertUID().toString(), systemAlert.getAlertTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(),systemAlert.getTitle(), systemAlert.getMessage())).thenReturn(1);
+        when(jdbcTemplate.update(sql,  systemAlert.getAlertUID().toString(), systemAlert.getAlertTimeUTC(),systemAlert.getTitle(), systemAlert.getMessage())).thenReturn(1);
 
         //then
         assertEquals(1, systemAlertDAO.insertRecord(systemAlert));
@@ -71,6 +71,11 @@ class SystemAlertDAOTest {
         //when
 
         //then
-        Assertions.assertThrows(NullPointerException.class, () -> jdbcTemplate.update(sql,  systemAlert.getAlertUID().toString(), systemAlert.getAlertTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(),systemAlert.getTitle(), systemAlert.getMessage()));
+        Assertions.assertThrows(NullPointerException.class, () -> jdbcTemplate.update(sql,  systemAlert.getAlertUID().toString(), systemAlert.getAlertTimeUTC(),systemAlert.getTitle(), systemAlert.getMessage()));
+    }
+
+    private static LocalDateTime getTimeDateNowInUTC() {
+        LocalDateTime ldt = LocalDateTime.now().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().truncatedTo(ChronoUnit.MINUTES);
+        return ldt;
     }
 }

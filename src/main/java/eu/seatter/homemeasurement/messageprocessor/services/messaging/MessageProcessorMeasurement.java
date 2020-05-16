@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import eu.seatter.homemeasurement.messageprocessor.model.Measurement;
 import eu.seatter.homemeasurement.messageprocessor.services.database.alert.BadJsonMessageDAO;
 import eu.seatter.homemeasurement.messageprocessor.services.database.measurement.MeasurementDAO;
+import eu.seatter.homemeasurement.messageprocessor.utils.UtilDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
@@ -48,7 +49,9 @@ public class MessageProcessorMeasurement implements MessageProcessor {
 
         try {
             measurement = mapper.readValue(json, Measurement.class);
+            measurement.setMeasureTimeUTC(UtilDateTime.convertDateTimeUTCToLocal(measurement.getMeasureTimeUTC()));
             log.debug("Measurement record object:" + measurement.toString());
+
             try {
                 return measurementDAO.insertRecord(measurement);
             } catch (DataAccessException ex) {
@@ -69,5 +72,7 @@ public class MessageProcessorMeasurement implements MessageProcessor {
             return -1; //reject the message, do not requeue
         }
     }
+
+
 
 }

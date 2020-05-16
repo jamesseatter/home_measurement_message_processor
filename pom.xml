@@ -10,7 +10,7 @@
     </parent>
     <groupId>eu.seatter.homemeasurement</groupId>
     <artifactId>messageprocessor</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <name>Home Measurement Message Processor</name>
     <description>Processes the Message Queue for the Home Measurement System</description>
 
@@ -85,7 +85,7 @@
     </dependencies>
 
     <build>
-        <finalName>messageprocessor</finalName>
+        <finalName>hm_mp</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

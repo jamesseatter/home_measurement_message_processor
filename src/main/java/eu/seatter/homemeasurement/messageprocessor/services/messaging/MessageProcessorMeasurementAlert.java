@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import eu.seatter.homemeasurement.messageprocessor.model.MeasurementAlert;
 import eu.seatter.homemeasurement.messageprocessor.services.database.alert.BadJsonMessageDAO;
 import eu.seatter.homemeasurement.messageprocessor.services.database.alert.MeasurementAlertDAO;
+import eu.seatter.homemeasurement.messageprocessor.utils.UtilDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
@@ -48,6 +49,7 @@ public class MessageProcessorMeasurementAlert implements MessageProcessor {
 
         try {
             measurementAlert = mapper.readValue(json, MeasurementAlert.class);
+            measurementAlert.setAlertTimeUTC(UtilDateTime.convertDateTimeUTCToLocal(measurementAlert.getAlertTimeUTC()));
             log.debug("Measurement Alert record object : " + measurementAlert.toString());
             try {
                 log.debug("Writing to the DB");

@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  hm_mp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure:5

@@ -12,8 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
@@ -51,7 +51,8 @@ class MeasurementDAOTest {
                 .sensorid("28-000000000002")
                 .title("Température de l'eau de chaudière")
                 .description("Returns the temperature of the hot water in the boiler")
-                .measureTimeUTC(ZonedDateTime.now(ZoneId.of("Etc/UTC")).truncatedTo(ChronoUnit.MINUTES))
+                //.measureTimeUTC(ZonedDateTime.now(ZoneId.of("Etc/UTC")).truncatedTo(ChronoUnit.MINUTES))
+                .measureTimeUTC(getTimeDateNowInUTC())
                 .familyid(40)
                 .sensorType(SensorType.ONEWIRE)
                 .measurementUnit(SensorMeasurementUnit.C)
@@ -66,7 +67,7 @@ class MeasurementDAOTest {
         String sql = "INSERT INTO measurement (record_id,date_measured_utc,sensor_type,sensor_id,title,description,measurement_unit,value,low_threshold,high_threshold,alert_group,alert_destination, alert_uid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         //when
-        when(jdbcTemplate.update(sql, measurement.getRecordUID().toString(), measurement.getMeasureTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(), measurement.getSensorType().toString(), measurement.getSensorid(), measurement.getTitle(), measurement.getDescription(), measurement.getMeasurementUnit().toString(), measurement.getValue(), measurement.getLow_threshold(), measurement.getHigh_threshold(), measurement.getAlertgroup(), measurement.getAlertdestination(), measurement.getAlertID().toString())).thenReturn(1);
+        when(jdbcTemplate.update(sql, measurement.getRecordUID().toString(), measurement.getMeasureTimeUTC(), measurement.getSensorType().toString(), measurement.getSensorid(), measurement.getTitle(), measurement.getDescription(), measurement.getMeasurementUnit().toString(), measurement.getValue(), measurement.getLow_threshold(), measurement.getHigh_threshold(), measurement.getAlertgroup(), measurement.getAlertdestination(), measurement.getAlertID().toString())).thenReturn(1);
 
         //then
         assertEquals(1, measurementDAO.insertRecord(measurement));
@@ -77,12 +78,16 @@ class MeasurementDAOTest {
     void whenInsertRecordWithEmptyMeasurementRecord_thenThrowNullPointerException() {
         //given
         Measurement measurement = new Measurement();
-
         String sql = "INSERT INTO measurement (record_id,date_measured_utc,sensor_type,sensor_id,title,description,measurement_unit,value,low_threshold,high_threshold,alert_group,alert_destination, alert_uid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         //when
 
         //then
-        Assertions.assertThrows(NullPointerException.class, () -> jdbcTemplate.update(sql, measurement.getRecordUID().toString(), measurement.getMeasureTimeUTC().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime(), measurement.getSensorType().toString(), measurement.getSensorid(), measurement.getTitle(), measurement.getDescription(), measurement.getMeasurementUnit().toString(), measurement.getValue(), measurement.getLow_threshold(), measurement.getHigh_threshold(), measurement.getAlertgroup(), measurement.getAlertdestination(), measurement.getAlertID()));
+        Assertions.assertThrows(NullPointerException.class, () -> jdbcTemplate.update(sql, measurement.getRecordUID().toString(), measurement.getMeasureTimeUTC(), measurement.getSensorType().toString(), measurement.getSensorid(), measurement.getTitle(), measurement.getDescription(), measurement.getMeasurementUnit().toString(), measurement.getValue(), measurement.getLow_threshold(), measurement.getHigh_threshold(), measurement.getAlertgroup(), measurement.getAlertdestination(), measurement.getAlertID()));
+    }
+
+    private static LocalDateTime getTimeDateNowInUTC() {
+        LocalDateTime ldt = LocalDateTime.now().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().truncatedTo(ChronoUnit.MINUTES);
+        return ldt;
     }
 }

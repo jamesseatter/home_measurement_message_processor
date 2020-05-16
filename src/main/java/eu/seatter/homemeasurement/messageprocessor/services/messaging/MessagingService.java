@@ -1,6 +1,10 @@
 package eu.seatter.homemeasurement.messageprocessor.services.messaging;
 
-import com.rabbitmq.client.*;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.DeliverCallback;
+import eu.seatter.homemeasurement.messageprocessor.services.Security;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -10,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 /**
@@ -24,6 +30,7 @@ public class MessagingService implements CommandLineRunner {
     final MessageProcessorMeasurement measurementMessageProcessor;
     final MessageProcessorMeasurementAlert alertMessageProcessor;
     final MessageProcessorSystemAlert systemAlertMessageProcessor;
+    final Security security;
     final Environment env;
 
     private final String MQ_HOST;
@@ -37,7 +44,7 @@ public class MessagingService implements CommandLineRunner {
     private final String MQ_SYSTEM_ALERT_ENABLED;
 
 
-    public MessagingService(@Value("${RabbitMQService.hostname:localhost}") String hostname,
+    public MessagingService(Security security, @Value("${RabbitMQService.hostname:localhost}") String hostname,
                             @Value("${RabbitMQService.portnumber:5672}") int portnumber,
                             @Value("${RabbitMQService.vhost:/}") String vhost,
                             @Value("${RabbitMQService.exchangee:}") String exchangename,
@@ -50,6 +57,7 @@ public class MessagingService implements CommandLineRunner {
                             MessageProcessorMeasurementAlert alertMessageProcessor,
                             MessageProcessorSystemAlert systemAlertMessageProcessor,
                             Environment env) {
+        this.security = security;
         this.MQ_HOST = hostname;
         this.MQ_PORT = portnumber;
         this.MQ_VHOST = vhost;
@@ -71,7 +79,7 @@ public class MessagingService implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws KeyManagementException, NoSuchAlgorithmException {
         log.info("MQ waiting for measurement messages");
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(MQ_HOST);
@@ -79,6 +87,24 @@ public class MessagingService implements CommandLineRunner {
         factory.setUsername(MQ_USERNAME);
         factory.setPassword(MQ_USERPASSWORD);
         factory.setVirtualHost(MQ_VHOST);
+
+        //todo Figure out how to make this work https://www.rabbitmq.com/ssl.html#enabling-tls
+        //todo certs are fine, but the server reports 2020-04-16 16:07:56.728 [error] <0.23802.1> closing AMQP connection <0.23802.1> ([2a02:120b:2c33:b5e0:613f:3877:c308:af07]:65087 -> [2a02:120b:2c33:b5e0:9171:e934:c613:3e84]:5672): {bad_header,<<22,3,3,1,30,1,0,1>>}
+//        try {
+//            log.info("Setting up TLS on connection");
+//            SSLContext key = security.getJKSKey();
+//            if(key != null) {
+//                factory.useSslProtocol(key);
+//                factory.useSslProtocol("TLSv1.2");
+//                //factory.enableHostnameVerification();
+//            } else {
+//                log.error("Unable to secure the connection with TLS. Will continue without security");
+//            }
+//        } catch (Exception ex) {
+//            log.error("Unable to secure the connection with TLS. Will continue without security");
+//            factory.useSslProtocol();
+//        }
+
 
         if(MQ_MEASUREMENT_ENABLED.equals("true")) {
             setupCallbacks(factory, "measurement");
