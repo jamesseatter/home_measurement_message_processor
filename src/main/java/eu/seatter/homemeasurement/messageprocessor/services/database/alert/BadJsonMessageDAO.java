@@ -17,7 +17,7 @@ public class BadJsonMessageDAO {
     final JdbcTemplate jdbcTemplate;
 
     @Value("${database.alert.badjson.table:CHANGE_ME}")
-    private String db_table;
+    private String dbTable;
 
     public BadJsonMessageDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -26,7 +26,7 @@ public class BadJsonMessageDAO {
     public int insertRecord(String title, String message) {
         log.debug("Inserting json bad message into DB");
         if(message == null) { message = "";}
-        final String sql = "INSERT INTO " + db_table + " (title, message) VALUES (?,?)";
+        final String sql = "INSERT INTO " + dbTable + " (title, message) VALUES (?,?)";
         return jdbcTemplate.update(sql, title, message);
     }
 

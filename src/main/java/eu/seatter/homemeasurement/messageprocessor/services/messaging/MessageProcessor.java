@@ -1,7 +1,5 @@
 package eu.seatter.homemeasurement.messageprocessor.services.messaging;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 /**
  * Created by IntelliJ IDEA.
  * User: jas

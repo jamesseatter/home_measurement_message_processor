@@ -14,9 +14,12 @@ import java.time.temporal.ChronoUnit;
  * Time: 16:51
  */
 public class UtilDateTime {
+
+    private UtilDateTime() {
+    }
+
     public static LocalDateTime getTimeDateNowNoSecondsInUTC() {
-        LocalDateTime ldt = LocalDateTime.now().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().truncatedTo(ChronoUnit.MINUTES);
-        return ldt;
+        return LocalDateTime.now().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().truncatedTo(ChronoUnit.MINUTES);
     }
 
     public static LocalDateTime convertDateTimeUTCToLocal(@NotNull LocalDateTime ldt) {

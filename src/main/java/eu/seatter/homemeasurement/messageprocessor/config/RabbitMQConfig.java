@@ -45,32 +45,32 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue measurement() {
-        return new Queue(rabbitMQProperties.getQueue_measurement());
+        return new Queue(rabbitMQProperties.getQueueMeasurement());
     }
 
     @Bean
     public Queue alertMeasurement() {
-        return new Queue(rabbitMQProperties.getQueue_alert_measurement());
+        return new Queue(rabbitMQProperties.getQueueAlertMeasurement());
     }
 
     @Bean
     public Queue alertSystem() {
-        return new Queue(rabbitMQProperties.getQueue_alert_system());
+        return new Queue(rabbitMQProperties.getQueueAlertSystem());
     }
 
     @Bean
     public String routing_key_measurement() {
-        return rabbitMQProperties.getRouting_key_measurement();
+        return rabbitMQProperties.getRoutingKeyMeasurement();
     }
 
     @Bean
     public String routing_key_alert_measurement() {
-        return rabbitMQProperties.getRouting_key_alert_measurement();
+        return rabbitMQProperties.getRoutingKeyAlertMeasurement();
     }
 
     @Bean
     public String routing_key_alert_system() {
-        return rabbitMQProperties.getRouting_key_alert_system();
+        return rabbitMQProperties.getRoutingKeyAlertSystem();
     }
 
 

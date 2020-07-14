@@ -57,4 +57,19 @@ public class Measurement implements Comparable<Measurement> {
     public int compareTo(Measurement that) {
         return this.measureTimeUTC.compareTo(that.measureTimeUTC);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+
+        if(obj == null || (this.getClass() != obj.getClass()))
+        {
+            return false;
+        }
+
+        Measurement guest = (Measurement) obj;
+        return (this.recordUID == guest.recordUID) &&
+                (this.measureTimeUTC != null && measureTimeUTC.equals(guest.measureTimeUTC)) &&
+                (this.sensorid != null && sensorid.equals(guest.sensorid));
+    }
 }

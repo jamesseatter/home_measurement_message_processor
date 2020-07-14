@@ -89,7 +89,7 @@ class MeasurementAlertDAOTest {
     }
 
     @Test
-    public void whenValidateRecord_givenAlertUIDisNull_thenReturnAlertUID() {
+    void whenValidateRecord_givenAlertUIDisNull_thenReturnAlertUID() {
         MeasurementAlert ma = MeasurementAlert.builder()
                 .alertUID(null)
                 .title("Température de l'eau de chaudière")
@@ -103,11 +103,11 @@ class MeasurementAlertDAOTest {
 
         //MeasurementAlert ma = new MeasurementAlert();
 
-        assertTrue(ReflectionTestUtils.invokeMethod(measurementAlertDAO, "validateRecord",ma).equals("AlertUID"));
+        assertEquals("AlertUID", ReflectionTestUtils.invokeMethod(measurementAlertDAO, "validateRecord", ma));
     }
 
     @Test
-    public void whenValidateRecord_givenAlertTimeUTCisNull_thenReturnAlertTimeUTC() {
+    void whenValidateRecord_givenAlertTimeUTCisNull_thenReturnAlertTimeUTC() {
         MeasurementAlert ma = MeasurementAlert.builder()
                 .alertUID(UUID.randomUUID())
                 .title("Température de l'eau de chaudière")
@@ -121,11 +121,11 @@ class MeasurementAlertDAOTest {
 
         //MeasurementAlert ma = new MeasurementAlert();
 
-        assertTrue(ReflectionTestUtils.invokeMethod(measurementAlertDAO, "validateRecord",ma).equals("AlertTimeUTC"));
+        assertEquals("AlertTimeUTC", ReflectionTestUtils.invokeMethod(measurementAlertDAO, "validateRecord", ma));
     }
 
     @Test
-    public void whenValidateRecord_givenTitleisNull_thenReturnNull() {
+    void whenValidateRecord_givenTitleisNull_thenReturnNull() {
         MeasurementAlert ma = MeasurementAlert.builder()
                 .alertUID(UUID.randomUUID())
                 .title(null)
@@ -144,7 +144,7 @@ class MeasurementAlertDAOTest {
     }
 
     @Test
-    public void whenValidateRecord_givenMessageisNull_thenReturnNull() {
+    void whenValidateRecord_givenMessageisNull_thenReturnNull() {
         MeasurementAlert ma = MeasurementAlert.builder()
                 .alertUID(UUID.randomUUID())
                 .title(null)

@@ -19,7 +19,7 @@ public class MeasurementAlertDAO {
     final JdbcTemplate jdbcTemplate;
 
     @Value("${database.alert.measurement.table:CHANGE_ME}")
-    private String db_alert_table;
+    private String dbAlertTable;
 
     public MeasurementAlertDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -29,7 +29,7 @@ public class MeasurementAlertDAO {
         String validateResult = validateRecord(ma);
         if (validateResult == null) {
             log.debug("Inserting measurement alert into DB");
-            final String sql = "INSERT INTO " + db_alert_table + " (alert_uid, date_alert_utc, title, value, measurement_unit, message, email_sent, email_sent_to) VALUES (?,?,?,?,?,?,?,?)";
+            final String sql = "INSERT INTO " + dbAlertTable + " (alert_uid, date_alert_utc, title, value, measurement_unit, message, email_sent, email_sent_to) VALUES (?,?,?,?,?,?,?,?)";
             return jdbcTemplate.update(sql, ma.getAlertUID().toString(), ma.getAlertTimeUTC(), ma.getTitle(), ma.getValue(), ma.getMeasurementUnit().toString(), ma.getMessage(), ma.isAlertSentEmail(), ma.getAlertSentEmailTO());
         } else {
             throw new IllegalArgumentException("Provided measurement value : " + validateResult);
@@ -37,10 +37,10 @@ public class MeasurementAlertDAO {
     }
 
     private String validateRecord(@NotNull MeasurementAlert record) {
-        if ((record.getAlertUID() == null) || (record.getAlertUID().toString() == "")) {return "AlertUID";}
-        if ((record.getAlertTimeUTC() == null) || (record.getAlertTimeUTC().toString() == "")) {return "AlertTimeUTC";}
-        if ((record.getTitle() == null) || (record.getTitle().toString() == "")) {record.setTitle("");}
-        if ((record.getMessage() == null) || (record.getMessage().toString() == "")) {record.setMessage("");}
+        if ((record.getAlertUID() == null) || (record.getAlertUID().toString().equals(""))) {return "AlertUID";}
+        if ((record.getAlertTimeUTC() == null) || (record.getAlertTimeUTC().toString().equals(""))) {return "AlertTimeUTC";}
+        if ((record.getTitle() == null) || (record.getTitle().equals(""))) {record.setTitle("");}
+        if ((record.getMessage() == null) || (record.getMessage().equals(""))) {record.setMessage("");}
         return null;
     }
 }

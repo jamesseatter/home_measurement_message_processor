@@ -26,7 +26,7 @@ public class MessageProcessorMeasurementAlert implements MessageProcessor {
     private final MeasurementAlertDAO alertDAO;
     private final BadJsonMessageDAO badJsonMessageDAO;
 
-    public MessageProcessorMeasurementAlert(MeasurementAlertDAO alertDAO, BadJsonMessageDAO badJsonMessageDAO) throws IllegalArgumentException {
+    public MessageProcessorMeasurementAlert(MeasurementAlertDAO alertDAO, BadJsonMessageDAO badJsonMessageDAO) {
         this.alertDAO = alertDAO;
         this.badJsonMessageDAO = badJsonMessageDAO;
     }

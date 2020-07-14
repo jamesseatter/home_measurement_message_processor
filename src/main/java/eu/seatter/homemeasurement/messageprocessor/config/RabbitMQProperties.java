@@ -18,12 +18,12 @@ public class RabbitMQProperties {
     private String password;
     private String vhost;
     private String exchange;
-    private String queue_measurement;
-    private String queue_alert_measurement;
-    private String queue_alert_system;
-    private String routing_key_measurement;
-    private String routing_key_alert_measurement;
-    private String routing_key_alert_system;
+    private String queueMeasurement;
+    private String queueAlertMeasurement;
+    private String queueAlertSystem;
+    private String routingKeyMeasurement;
+    private String routingKeyAlertMeasurement;
+    private String routingKeyAlertSystem;
 
     public String getHostname() {
         return hostname;
@@ -65,51 +65,51 @@ public class RabbitMQProperties {
         this.exchange = exchange;
     }
 
-    public String getQueue_measurement() {
-        return queue_measurement;
+    public String getQueueMeasurement() {
+        return queueMeasurement;
     }
 
-    public void setQueue_measurement(String queue_measurement) {
-        this.queue_measurement = queue_measurement;
+    public void setQueueMeasurement(String queueMeasurement) {
+        this.queueMeasurement = queueMeasurement;
     }
 
-    public String getQueue_alert_measurement() {
-        return queue_alert_measurement;
+    public String getQueueAlertMeasurement() {
+        return queueAlertMeasurement;
     }
 
-    public void setQueue_alert_measurement(String queue_alert_measurement) {
-        this.queue_alert_measurement = queue_alert_measurement;
+    public void setQueueAlertMeasurement(String queueAlertMeasurement) {
+        this.queueAlertMeasurement = queueAlertMeasurement;
     }
 
-    public String getQueue_alert_system() {
-        return queue_alert_system;
+    public String getQueueAlertSystem() {
+        return queueAlertSystem;
     }
 
-    public void setQueue_alert_system(String queue_alert_system) {
-        this.queue_alert_system = queue_alert_system;
+    public void setQueueAlertSystem(String queueAlertSystem) {
+        this.queueAlertSystem = queueAlertSystem;
     }
 
-    public String getRouting_key_measurement() {
-        return routing_key_measurement;
+    public String getRoutingKeyMeasurement() {
+        return routingKeyMeasurement;
     }
 
-    public void setRouting_key_measurement(String routing_key_measurement) {
-        this.routing_key_measurement = routing_key_measurement;
+    public void setRoutingKeyMeasurement(String routingKeyMeasurement) {
+        this.routingKeyMeasurement = routingKeyMeasurement;
     }
 
-    public String getRouting_key_alert_measurement() {
-        return routing_key_alert_measurement;
+    public String getRoutingKeyAlertMeasurement() {
+        return routingKeyAlertMeasurement;
     }
 
-    public void setRouting_key_alert_measurement(String routing_key_alert_measurement) {
-        this.routing_key_alert_measurement = routing_key_alert_measurement;
+    public void setRoutingKeyAlertMeasurement(String routingKeyAlertMeasurement) {
+        this.routingKeyAlertMeasurement = routingKeyAlertMeasurement;
     }
 
-    public String getRouting_key_alert_system() {
-        return routing_key_alert_system;
+    public String getRoutingKeyAlertSystem() {
+        return routingKeyAlertSystem;
     }
 
-    public void setRouting_key_alert_system(String routing_key_alert_system) {
-        this.routing_key_alert_system = routing_key_alert_system;
+    public void setRoutingKeyAlertSystem(String routingKeyAlertSystem) {
+        this.routingKeyAlertSystem = routingKeyAlertSystem;
     }
 }

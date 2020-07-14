@@ -27,7 +27,7 @@ public class MessageReceiver {
     }
 
     @RabbitListener(queues = "#{measurement}")
-    public void receiveMeasurement(String in) throws InterruptedException {
+    public void receiveMeasurement(String in) {
         receive(in, 1);
     }
 

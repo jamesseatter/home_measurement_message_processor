@@ -71,7 +71,8 @@ class SystemAlertDAOTest {
         //when
 
         //then
-        Assertions.assertThrows(NullPointerException.class, () -> jdbcTemplate.update(sql,  systemAlert.getAlertUID().toString(), systemAlert.getAlertTimeUTC(),systemAlert.getTitle(), systemAlert.getMessage()));
+        Assertions.assertThrows(NullPointerException.class,
+                () -> jdbcTemplate.update(sql,  systemAlert.getAlertUID().toString(), systemAlert.getAlertTimeUTC(),systemAlert.getTitle(), systemAlert.getMessage()));
     }
 
     private static LocalDateTime getTimeDateNowInUTC() {

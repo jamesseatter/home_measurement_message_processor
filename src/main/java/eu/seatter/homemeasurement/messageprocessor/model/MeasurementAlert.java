@@ -51,4 +51,19 @@ public class MeasurementAlert implements Comparable<MeasurementAlert> {
     public int compareTo(@NotNull MeasurementAlert that) {
         return this.alertTimeUTC.compareTo(that.alertTimeUTC);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+
+        if(obj == null || (this.getClass() != obj.getClass()))
+        {
+            return false;
+        }
+
+        MeasurementAlert guest = (MeasurementAlert) obj;
+        return (this.alertUID == guest.alertUID) &&
+                (this.alertTimeUTC != null && alertTimeUTC.equals(guest.alertTimeUTC)) &&
+                (this.message != null && message.equals(guest.message));
+    }
 }

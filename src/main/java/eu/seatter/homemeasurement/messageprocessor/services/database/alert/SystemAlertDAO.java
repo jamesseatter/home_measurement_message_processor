@@ -19,7 +19,7 @@ public class SystemAlertDAO {
     final JdbcTemplate jdbcTemplate;
 
     @Value("${database.alert.system.table:CHANGE_ME}")
-    private String db_alert_table;
+    private String dbAlertTable;
 
     public SystemAlertDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -28,7 +28,7 @@ public class SystemAlertDAO {
     public int insertRecord(@NotNull final SystemAlert systemAlert) {
         log.warn("System alert logging to DB not available");
         log.debug("Inserting system alert into DB");
-        final String sql = "INSERT INTO " + db_alert_table + " (alert_uid,date_alert_utc, title, message) VALUES (?,?,?,?)";
+        final String sql = "INSERT INTO " + dbAlertTable + " (alert_uid,date_alert_utc, title, message) VALUES (?,?,?,?)";
         return jdbcTemplate.update(sql,  systemAlert.getAlertUID().toString(), systemAlert.getAlertTimeUTC(),systemAlert.getTitle(), systemAlert.getMessage());
     }
 }
