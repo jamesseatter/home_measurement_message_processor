@@ -29,7 +29,7 @@ class BadJsonMessageDAOTest {
     public void initUseCase() {
         badJsonMessageDAO = new BadJsonMessageDAO(jdbcTemplate);
         ReflectionTestUtils.setField(badJsonMessageDAO, "jdbcTemplate", jdbcTemplate);
-        ReflectionTestUtils.setField(badJsonMessageDAO, "db_table", "badjsonmessages");
+        ReflectionTestUtils.setField(badJsonMessageDAO, "dbTable", "badjsonmessages");
     }
 
     @Test

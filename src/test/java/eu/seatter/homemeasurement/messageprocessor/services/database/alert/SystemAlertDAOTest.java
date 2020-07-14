@@ -38,7 +38,7 @@ class SystemAlertDAOTest {
     public void initUseCase() {
         systemAlertDAO = new SystemAlertDAO(jdbcTemplate);
         ReflectionTestUtils.setField(systemAlertDAO, "jdbcTemplate", jdbcTemplate);
-        ReflectionTestUtils.setField(systemAlertDAO, "db_alert_table", db_table);
+        ReflectionTestUtils.setField(systemAlertDAO, "dbAlertTable", db_table);
     }
 
     @Test

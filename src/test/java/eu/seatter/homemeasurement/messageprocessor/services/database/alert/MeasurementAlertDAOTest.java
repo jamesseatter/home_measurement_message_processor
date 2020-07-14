@@ -39,7 +39,7 @@ class MeasurementAlertDAOTest {
     public void initUseCase() {
         measurementAlertDAO = new MeasurementAlertDAO(jdbcTemplate);
         ReflectionTestUtils.setField(measurementAlertDAO, "jdbcTemplate", jdbcTemplate);
-        ReflectionTestUtils.setField(measurementAlertDAO, "db_alert_table", db_table);
+        ReflectionTestUtils.setField(measurementAlertDAO, "dbAlertTable", db_table);
     }
 
     @Test

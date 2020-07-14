@@ -40,7 +40,7 @@ class MeasurementDAOTest {
     public void initUseCase() {
         measurementDAO = new MeasurementDAO(jdbcTemplate);
         ReflectionTestUtils.setField(measurementDAO, "jdbcTemplate", jdbcTemplate);
-        ReflectionTestUtils.setField(measurementDAO, "db_measurement_table", db_table);
+        ReflectionTestUtils.setField(measurementDAO, "dbMeasurementTable", db_table);
     }
 
     @Test
