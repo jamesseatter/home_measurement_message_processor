@@ -1,5 +1,5 @@
 # Dockerfile
-FROM java:8-jdk-alpine
+FROM openjdk:11-jre-slim
 COPY ./app/hm_mp.jar /usr/app/
 
 WORKDIR /usr/app
