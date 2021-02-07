@@ -38,7 +38,7 @@ public class MessageReceiver {
 
     @RabbitListener(queues = "#{alertSystem}")
     public void receiveAlertSystem(String in)  {
-        receive(in, 2);
+        receive(in, 3);
     }
 
     public void receive(String in, int receiver) {
