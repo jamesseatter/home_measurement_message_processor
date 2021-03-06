@@ -28,7 +28,10 @@ jobs:
         java-version: 11
     - name: Build with Maven
       run: mvn -DskipTests -B package --file pom.xml
-    - uses: actions/upload-artifact@v2
+    - name: copy target to staging
+      run: mkdir staging && cp target/*.jar staging
+    - name: Copy staging to artifects
+    uses: actions/upload-artifact@v2
       with:
         name: Package
         path: staging
